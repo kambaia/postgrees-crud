@@ -1,4 +1,4 @@
-export interface Isearch {
+export interface ISearch {
   search: string;
   limit: number;
   page: number;
