@@ -1,0 +1,16 @@
+version: "3.5"
+
+valumes:
+  data:
+  
+services:
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=2212
+    volumes:
+      - data:/var/lib/postgres/data
+      - type: tmpfs
+        target: /dev/shm

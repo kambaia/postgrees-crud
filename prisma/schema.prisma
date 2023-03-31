@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs  https //pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  userName     String?
+  fullName     String
+  password     String
+  userBirth    String
+  status       Boolean
+  role         Int
+  permission   String
+  profile      String?
+  created_at   DateTime       @default(now())
+  FavoriteBook FavoriteBook[]
+
+  socialMedia SocialMedia[]
+
+  @@map("users")
+}
+
+model Category {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  created_at DateTime @default(now())
+
+  @@map("categories")
+}
+
+model Book {
+  id                Int     @id @default(autoincrement())
+  cover             String
+  nameCover         String
+  title             String
+  publishLocation   String
+  issueDate         String
+  PublishingCompany String
+  language          String
+  bookCode          String
+  boxSize           Int
+  textReading       Boolean
+  description       Boolean
+  numberOfpage      Int
+  active            Boolean
+  yearOfLaunch      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  favorites    FavoriteBook[]
+  AuthorteBook AuthorteBook[]
+}
+
+model Author {
+  id            Int     @id @default(autoincrement())
+  authorProfile String
+  nameProfile   String
+  authorName    String
+  birthDate     String
+  age           Int
+  biography     String?
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  AuthorteBook AuthorteBook[]
+}
+
+model Document {
+  id     Int    @id @default(autoincrement())
+  format String
+  size   Int
+  url    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FavoriteBook {
+  id     Int   @id @default(autoincrement())
+  Books  Book? @relation(fields: [bookId], references: [id])
+  bookId Int?
+  users  User? @relation(fields: [userId], references: [id])
+  userId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuthorteBook {
+  id      Int     @id @default(autoincrement())
+  Books   Book?   @relation(fields: [bookId], references: [id])
+  bookId  Int?
+  autors  Author? @relation(fields: [autorId], references: [id])
+  autorId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SocialMedia {
+  id        Int      @id @default(autoincrement())
+  name      String
+  link      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
